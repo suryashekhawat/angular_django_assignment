@@ -1,0 +1,56 @@
+<div class="category-wraper">
+  <div class="category-content">
+    <div class="action-btns">
+      <ul>
+        <li>
+          <div class="form-group">
+            <input class="form-control" [formControl]="product_name" type="text" name="p_name" value="" required placeholder="Product Name">
+          </div>
+        </li>
+        <li>
+          <div class="form-group">
+            <input [formControl]="product_price" class="form-control" type="text" name="p_price" value="" required placeholder="Product Price">
+          </div>
+        </li>
+        <li>
+          <div class="form-group">
+            <select [formControl]="product_category" class="select form-control" name="">
+              <option disabled value="">Select Category</option>
+              <option value="{{c.id}}" *ngFor="let c of categories">{{c.type}}</option>
+            </select>
+          </div>
+        </li>
+        <li><a class="btn btn-primary" (click)="add()">Add</a></li>
+      </ul>
+    </div>
+    <div class="category-list">
+      <table class="table table-hover">
+        <tr>
+          <th>Id</th>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Category</th>
+          <th>Action</th>
+        </tr>
+        <tr *ngFor="let product of productsObj">
+          <td *ngIf="!product.editRequired">{{product.product_id}}</td>
+          <td *ngIf="product.editRequired"><input type="text"  name="product_id" value="{{product.product_id}}" disabled></td>
+          <td *ngIf="!product.editRequired">{{product.name}}</td>
+          <td *ngIf="product.editRequired"><input [(ngModel)]="u_product_name" #ctrl="ngModel" type="text"  name="product_name" value="{{product.name}}"></td>
+          <td *ngIf="!product.editRequired">{{product.price}}</td>
+          <td *ngIf="product.editRequired"><input type="text" [(ngModel)]="u_product_price" #ctrl="ngModel"  name="product_price" value="{{product.price}}"></td>
+          <td *ngIf="!product.editRequired">{{product.category}}</td>
+          <td *ngIf="product.editRequired"><input type="text" [(ngModel)]="u_product_category" #ctrl="ngModel"  name="product_category_id" value="{{product.category}}"></td>
+          <td class="actions-btns">
+            <ul>
+              <li><a class="btn btn-danger" (click)="remove(product.product_id)">Remove</a></li>
+              <li><a class="btn btn-primary" (click)="editRequired(product.product_id)">Edit</a></li>
+              <li *ngIf="product.editRequired"><a class="btn btn-success" (click)="updateProduct(product.product_id, u_product_name, u_product_price, u_product_category)">Save</a></li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+
+    </div>
+  </div>
+</div>

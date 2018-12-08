@@ -1,0 +1,20 @@
+<div class="app-wraper">
+  <ul class="nav">
+    <li class="nav-item" *ngIf="isLoggedIn">
+      <a class="nav-link" routerLink="/category">Category</a>
+    </li>
+    <li class="nav-item" *ngIf="isLoggedIn">
+      <a class="nav-link" routerLink="/products">Products</a>
+    </li>
+    <li class="nav-item" *ngIf="isLoggedIn">
+      <a class="nav-link">Hi, {{guest}}</a>
+    </li>
+    <li class="nav-item" *ngIf="!isLoggedIn">
+      <a class="nav-link" routerLink="/login">Login</a>
+    </li>
+    <li class="nav-item" *ngIf="isLoggedIn">
+      <a class="nav-link" style="cursor: pointer;" (click)="logout()">Logout</a>
+    </li>
+  </ul>
+  <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,36 @@
+<div class="category-wraper">
+  <div class="category-content">
+    <div class="action-btns">
+      <ul>
+        <li>
+          <div class="form-group">
+            <input type="text" class="form-control" [formControl]="category_type" required name="category_type" value="" placeholder="Category Type">
+          </div>
+        </li>
+        <li><a class="btn btn-primary" (click)="add()">Add New Category</a></li>
+      </ul>
+    </div>
+    <div class="category-list">
+      <table class="table table-hover">
+        <tr>
+          <th>Id</th>
+          <th>Type</th>
+          <th>Action</th>
+        </tr>
+        <tr *ngFor="let category of categories">
+          <td *ngIf="!category.editRequired">{{category.id}}</td>
+          <td *ngIf="category.editRequired"><input type="text" name="category_id" value="{{category.id}}" disabled></td>
+          <td *ngIf="!category.editRequired">{{category.type}}</td>
+          <td *ngIf="category.editRequired"><input [(ngModel)]="u_category_type" #ctrl="ngModel" type="text" name="category_type" value="{{category.type}}"></td>
+          <td class="actions-btns">
+            <ul>
+              <li><a class="btn btn-danger" (click)="remove(category.id)">Remove</a></li>
+              <li><a class="btn btn-primary" (click)="editRequired(category.id)">Edit</a></li>
+              <li *ngIf="category.editRequired"><a class="btn btn-success" (click)="updateCategory(category.id, u_category_type)">Save</a></li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
