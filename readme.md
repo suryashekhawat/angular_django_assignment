@@ -11,3 +11,19 @@
 
 ### Get Live
   http://localhost:8000/
+
+
+# Front End Angular 7 and Django REST APIs
+  Node and Npm should be install
+  Refer this for more information, https://nodejs.org/en/
+
+  cd frontend-service
+  npm install
+  ng serve --open
+
+### Get Live
+  http://localhost:4200/
+
+  Login: (django Superuser)
+    Username: admin
+    Password: admin123
