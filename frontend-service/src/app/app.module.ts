@@ -5,6 +5,11 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 
+
+//ngrx store
+import { StoreModule } from '@ngrx/store';
+import { reducer } from './reducers/products.reducers';
+
 //all components
 import { AppComponent } from './app.component';
 import { ProductsComponent } from './components/products/products.component';
@@ -27,6 +32,9 @@ import {BackendService} from './backend.service'
   ],
   imports: [
     BrowserModule,
+    StoreModule.forRoot({
+      products: reducer
+    }),
     AppRoutingModule,
     HttpClientModule,
     FormsModule,

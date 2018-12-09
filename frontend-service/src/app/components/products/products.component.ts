@@ -4,6 +4,11 @@ import { BackendService } from './../../backend.service'
 import { ApputilsService } from './../../apputils.service';
 import { FormControl } from '@angular/forms';
 
+import { Observable } from 'rxjs';
+import {Store} from '@ngrx/store';
+import {ProductsModel} from './../../models/products.model'
+import { AppState } from './../../app.state'
+import * as ProductsActions from './../../actions/products.actions'
 
 @Component({
   selector: 'app-products',
@@ -11,6 +16,7 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./products.component.sass']
 })
 export class ProductsComponent implements OnInit {
+
   product_name = new FormControl('');
   product_price = new FormControl('');
   product_category = new FormControl('');
@@ -18,13 +24,16 @@ export class ProductsComponent implements OnInit {
   u_product_id
   u_product_price
   u_product_category
-  productsObj: any = []
+  productsObservable: Observable<ProductsModel[]>
+  productsObj: any = [];
   categories: any = []
   constructor(
     public auth: AuthService,
     public backend: BackendService,
-    public apputils: ApputilsService
+    public apputils: ApputilsService,
+    private store: Store<AppState>
   ) {
+    this.productsObservable = store.select('products');
     this.refreshNow();
 
   }
@@ -33,10 +42,12 @@ export class ProductsComponent implements OnInit {
   }
   add() {
     let my_product = {
+      product_id: 'None',
       name: this.product_name.value,
       price: this.product_price.value,
       category: this.product_category.value
     }
+    this.store.dispatch(new ProductsActions.AddProduct(my_product))
     console.log(my_product)
     this.backend.addNewProduct(my_product).subscribe((response) => {
       console.log(response)
@@ -87,7 +98,7 @@ export class ProductsComponent implements OnInit {
       .subscribe((response)=>{
         console.log(response)
         this.refreshNow();
-        
+
       })
   }
 }

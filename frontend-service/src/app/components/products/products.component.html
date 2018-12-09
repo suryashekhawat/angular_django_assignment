@@ -32,7 +32,7 @@
           <th>Category</th>
           <th>Action</th>
         </tr>
-        <tr *ngFor="let product of productsObj">
+        <tr *ngFor="let product of productsObservable | async">
           <td *ngIf="!product.editRequired">{{product.product_id}}</td>
           <td *ngIf="product.editRequired"><input type="text"  name="product_id" value="{{product.product_id}}" disabled></td>
           <td *ngIf="!product.editRequired">{{product.name}}</td>
