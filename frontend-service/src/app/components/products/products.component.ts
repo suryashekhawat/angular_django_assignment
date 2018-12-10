@@ -5,6 +5,7 @@ import { ApputilsService } from './../../apputils.service';
 import { FormControl } from '@angular/forms';
 
 import { Observable } from 'rxjs';
+import { of } from 'rxjs';
 import {Store} from '@ngrx/store';
 import {ProductsModel} from './../../models/products.model'
 import { AppState } from './../../app.state'
@@ -31,9 +32,14 @@ export class ProductsComponent implements OnInit {
     public auth: AuthService,
     public backend: BackendService,
     public apputils: ApputilsService,
-    private store: Store<AppState>
+    private store: Store<AppState>,
   ) {
     this.productsObservable = store.select('products');
+    this.productsObservable.subscribe((products)=>{
+      this.productsObj = products;
+
+    })
+    
     this.refreshNow();
 
   }
@@ -42,16 +48,17 @@ export class ProductsComponent implements OnInit {
   }
   add() {
     let my_product = {
-      product_id: 'None',
+      // product_id: 'None',
       name: this.product_name.value,
       price: this.product_price.value,
       category: this.product_category.value
     }
-    this.store.dispatch(new ProductsActions.AddProduct(my_product))
     console.log(my_product)
     this.backend.addNewProduct(my_product).subscribe((response) => {
       console.log(response)
-      this.refreshNow();
+      my_product['product_id']=response['product_id'];
+      this.store.dispatch(new ProductsActions.AddProduct(my_product))
+      // this.refreshNow();
     })
   }
   editRequired(id) {
@@ -73,8 +80,10 @@ export class ProductsComponent implements OnInit {
             this.backend.getAllProducts()
               .subscribe((products) => {
                 console.log('all products', products)
-                this.productsObj = products;
-                this.productsObj.map(p => p.editRequired = false)
+                this.store.dispatch(new ProductsActions.RefreshProductsList(products))
+
+                // this.productsObj = products;
+                // this.productsObj.map(p => p.editRequired = false)
               })
           })
 
@@ -84,8 +93,9 @@ export class ProductsComponent implements OnInit {
   remove(id) {
     this.backend.removeProduct(id)
       .subscribe((response)=>{
+        this.store.dispatch(new ProductsActions.RemoveProduct({product_id:id}))
         console.log('deleted', response)
-        this.refreshNow()
+        // this.refreshNow()
       })
   }
 
@@ -96,8 +106,9 @@ export class ProductsComponent implements OnInit {
     }
     this.backend.updateProduct(id, product)
       .subscribe((response)=>{
+        this.store.dispatch(new ProductsActions.UpdateProduct({product_id:id, name, price, category}))
         console.log(response)
-        this.refreshNow();
+        // this.refreshNow();
 
       })
   }

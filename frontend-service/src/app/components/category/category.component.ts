@@ -4,6 +4,12 @@ import { BackendService } from './../../backend.service';
 import { ApputilsService } from './../../apputils.service';
 import { FormControl } from '@angular/forms';
 
+import { Observable } from 'rxjs';
+import {Store} from '@ngrx/store';
+import {CategoryModel} from './../../models/category.model'
+import { AppState } from './../../app.state'
+import * as CategoryActions from './../../actions/category.actions'
+
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',
@@ -13,11 +19,18 @@ export class CategoryComponent implements OnInit {
   category_type = new FormControl('');
   categories: any
   u_category_type
+  categoriesObservable: Observable<CategoryModel[]>
   constructor(
     public auth: AuthService,
     public backend: BackendService,
-    public apputils: ApputilsService
+    public apputils: ApputilsService,
+    private store: Store<AppState>
   ) {
+    this.categoriesObservable = this.store.select('categories');
+    this.categoriesObservable.subscribe(categories => {
+      console.log('my categories : ', categories);
+      this.categories = categories;
+    });
     this.refreshNow();
   }
 
@@ -33,7 +46,9 @@ export class CategoryComponent implements OnInit {
     this.backend.removeCategory(id)
       .subscribe((response)=>{
         console.log('deleted', response)
-        this.refreshNow()
+
+        this.store.dispatch(new CategoryActions.RemoveCategory({id: id}))
+        // this.refreshNow()
       })
   }
 
@@ -42,8 +57,10 @@ export class CategoryComponent implements OnInit {
     this.backend.addNewCategory({
       type: this.category_type.value
     }).subscribe((response) => {
-      console.log(response)
-      this.refreshNow();
+      console.log('new category added', response)
+      this.store.dispatch(new CategoryActions.AddCategory({id: response['id'], type: response['type']}))
+
+      // this.refreshNow();
     })
   }
 
@@ -58,7 +75,8 @@ export class CategoryComponent implements OnInit {
           .subscribe((categories) => {
             console.log(categories)
             this.categories = categories;
-            this.categories.map(c => c.editRequired == false);
+            this.store.dispatch(new CategoryActions.RefreshCategoryList(categories))
+            // this.categories.map(c => c.editRequired == false);
           })
 
       })
@@ -70,7 +88,9 @@ export class CategoryComponent implements OnInit {
     this.backend.updateCategory(id, category)
       .subscribe((response)=>{
         console.log(response)
-        this.refreshNow();
+        this.store.dispatch(new CategoryActions.UpdateCategory({id: response['id'], type: response['type']}))
+
+        // this.refreshNow();
       })
   }
 }

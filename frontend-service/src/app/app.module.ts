@@ -8,7 +8,10 @@ import { AppRoutingModule } from './app-routing.module';
 
 //ngrx store
 import { StoreModule } from '@ngrx/store';
-import { reducer } from './reducers/products.reducers';
+import { productreducer } from './reducers/products.reducers';
+import { categoryreducer } from './reducers/category.reducers';
+import { userreducer } from './reducers/user.reducers';
+
 
 //all components
 import { AppComponent } from './app.component';
@@ -33,7 +36,9 @@ import {BackendService} from './backend.service'
   imports: [
     BrowserModule,
     StoreModule.forRoot({
-      products: reducer
+      products: productreducer,
+      categories: categoryreducer,
+      user: userreducer
     }),
     AppRoutingModule,
     HttpClientModule,
