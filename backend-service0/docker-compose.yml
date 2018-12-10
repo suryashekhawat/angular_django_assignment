@@ -1,8 +1,6 @@
 version: '3'
 
 services:
-  db:
-    image: postgres
   web:
     build: .
     volumes:
@@ -12,5 +10,3 @@ services:
     command: python3 productsapis/manage.py runserver 0.0.0.0:5500
     ports:
       - "5500:5500"
-    depends_on:
-      - db
