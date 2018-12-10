@@ -8,9 +8,15 @@
   cd backend-service
   docker compose build
   docker compose up
+
+  cd backend-service0
+  docker compose build
+  docker compose up
   ```
 ### Get Live
-  http://localhost:8000/
+  http://localhost:5500/
+  http://localhost:5800/
+
 
 
 # Front End Angular 7 and Django REST APIs
