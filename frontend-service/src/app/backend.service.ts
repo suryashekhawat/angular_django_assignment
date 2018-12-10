@@ -7,7 +7,8 @@ import { HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class BackendService {
-  baseUrl = "http://localhost:8000"
+  baseUrl = "http://localhost:5500"
+  baseUrlCat_server = "http://localhost:5800"
   constructor(
     public http: HttpClient,
     public auth: AuthService,
@@ -23,7 +24,7 @@ export class BackendService {
           'Authorization': 'Bearer ' + this.apputils.getLocalStorage('accessToken')
         })
       };
-    return this.http.get(this.baseUrl + '/category/', httpOptions)
+    return this.http.get(this.baseUrlCat_server + '/category/', httpOptions)
   }
   addNewCategory(category){
     const httpOptions = {
@@ -32,7 +33,7 @@ export class BackendService {
         'Authorization': 'Bearer ' + this.apputils.getLocalStorage('accessToken')
       })
     };
-  return this.http.post(this.baseUrl + '/category/', category, httpOptions)
+  return this.http.post(this.baseUrlCat_server + '/category/', category, httpOptions)
   }
   addNewProduct(product){
     const httpOptions = {
@@ -59,7 +60,7 @@ export class BackendService {
         'Authorization': 'Bearer ' + this.apputils.getLocalStorage('accessToken')
       })
     };
-  return this.http.delete(this.baseUrl + '/category/'+id, httpOptions)
+  return this.http.delete(this.baseUrlCat_server + '/category/'+id, httpOptions)
   }
   removeProduct(id){
     const httpOptions = {
@@ -88,6 +89,6 @@ export class BackendService {
         'Authorization': 'Bearer ' + this.apputils.getLocalStorage('accessToken')
       })
     };
-  return this.http.put(this.baseUrl + '/category/'+id+'/', data,  httpOptions)
+  return this.http.put(this.baseUrlCat_server + '/category/'+id+'/', data,  httpOptions)
   }
 }
